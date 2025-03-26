@@ -8,7 +8,9 @@ import PharmacyMaps from '../screens/PharmacyMaps';
 import OnboardingScreen from '../onboarding';
 import SearchScreen from '../screens/searchScreen';
 import Register from '../screens/Register';
-import Login from '../screens/Login/indes';
+import Login from '../screens/Login';
+import ShowReminder from '../screens/Reminders/ShowReminder';
+import Camera from '../screens/camera';
 const Stack = createStackNavigator();
 
 const AuthStack = () => {
@@ -25,7 +27,8 @@ const AuthStack = () => {
       <Stack.Screen name="SearchScreen" component={SearchScreen} />
       <Stack.Screen name="Register" component={Register} />
       <Stack.Screen name="Login" component={Login}/>
-
+       <Stack.Screen name='ShowReminder' component={ShowReminder}/>
+       <Stack.Screen name='Camera' component={Camera}/>
     </Stack.Navigator>
   );
 };

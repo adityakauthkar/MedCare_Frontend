@@ -1,29 +1,70 @@
-// const BASE_URL = 'http://192.168.1.204:4000'
-import axios from "axios";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import {Alert} from 'react-native';
 
-// Register User API
-export const RegisterUserAPI = async (userData) => {
-    try {
-        const url = 'http://192.168.1.204:4000/api/user/registerUser';
-        const response = await axios.post(url, userData);  // Assuming you want to send user data in the post request
-        return response.data; 
-    } catch (error) { 
-        console.log("Error fetching register user:", error);
-        throw error; // It's good practice to throw the error so the calling function can handle it.
+// Create an Axios instance with a base URL
+const apiClient = axios.create({
+  baseURL: 'http://192.168.234.33:4000/api',
+  timeout: 10000, // You can adjust the timeout as needed
+});
+//http://10.0.2.2:4000
+// Login User
+// Login User
+export const LoginUserAPI = async values => {
+  try {
+    const response = await apiClient.post('/user/login', values);
+    console.log('Response from server:', response.data); // Log the full response
+
+    // Check the 'success' field instead of 'status'
+    if (response.data.success === 'ok') {
+      const token = response.data.token; // Update to use 'token' from the response
+      const userId = response.data._id;
+      if (token) {
+        await AsyncStorage.setItem('token', token); // Store the token
+        Alert.alert('Logged in successfully');
+        AsyncStorage.setItem('userId' , userId);
+      } else {
+        Alert.alert('Login failed', 'Token not received');
+      }
+      return response.data;
+    } else {
+      Alert.alert(
+        'Login failed',
+        response.data.message || 'Unknown error occurred',
+      );
     }
-}
+  } catch (error) {
+    console.error(
+      'Error in LoginUserAPI:',
+      error.response ? error.response.data : error.message,
+    );
+    Alert.alert(
+      'Login Error',
+      error.response?.data?.message || 'An error occurred',
+    );
+    throw error; // Re-throw the error to propagate it further
+  }
+};
 
-
-
-// Login User API
-export const LoginUserAPI = async (loginData) => {
-    try {
-        const url = 'http://192.168.1.204:4000/api/user/login';
-        const response = await axios.post(url, loginData); // Assuming login will use POST method and requires data
-        return response.data;
-    } catch (error) { 
-        console.log("Error fetching login user:", error);
-        throw error; // Similarly, throw the error to the calling function.
+// Register User
+export const RegisterUserAPI = async values => {
+  try {
+    const response = await apiClient.post('/user/registerUser', values);
+    if (response.data.status === 'ok') {
+      Alert.alert('Registration successful', 'You can now log in');
+      return response.data;
+    } else {
+      Alert.alert(
+        'Registration failed',
+        response.data.message || 'Unknown error occurred',
+      );
     }
-}
-
+  } catch (error) {
+    console.error('Error in RegisterUserAPI:', error.response || error.message);
+    Alert.alert(
+      'Registration Error',
+      error.response?.data?.message || 'An error occurred',
+    );
+    throw error;
+  }
+};

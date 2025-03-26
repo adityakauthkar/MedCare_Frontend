@@ -1,15 +1,11 @@
-import Toast from 'react-native-simple-toast';
-import Snackbar  from 'react-native-snackbar';
+// src/utils/snackBar.js
 
-export const showSnackBar = (msg , type= 'INFO') => {
-    Snackbar.show({
-        text: msg,
-        duration: Snackbar.LENGTH_SHORT,
-        backgroundColor:type == 'ERROR' ? '#f00': '#000'
+import Toast from 'react-native-toast-message';
+
+export const ShowToast = () => {
+    Toast.show({
+        type: 'success',
+        text1: 'Successfully Logged In!',
+        position: 'top',
     });
-
-};
-
-export const showToast = (msg) => {
-    Toast.show(msg)
 };

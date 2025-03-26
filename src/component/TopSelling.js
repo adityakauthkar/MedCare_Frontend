@@ -1,5 +1,5 @@
 // HorizontalList.js
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -9,10 +9,14 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
+import TopSellingScreen from '../screens/top-sellingScreen';
+
 
 const HorizontalList = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigation = useNavigation();
 
   useEffect(() => {
     fetchData();
@@ -20,20 +24,26 @@ const HorizontalList = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://192.168.1.204:4000/api/medicine/getAllMedicines');
-      setData(response.data);
+      const response = await axios.get('http://192.168.221.33:4000/api/medicine/top-selling');
+      setData(response.data.data);
       setLoading(false);
+      console.log(response);
     } catch (error) {
       console.error('Error fetching data:', error);
       setLoading(false);
-    }
+    } 
   };
 
-  const renderItem = ({item}) => (
+
+  const handleTopSellingOnpress = () => {
+    navigation.navigate('TopSellingScreen');
+  }
+
+  const renderItem = ({ item }) => (
     <View style={styles.itemContainer}>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => handleTopSellingOnpress()}>
         <View style={styles.imageView}>
-          <Image source={{uri: item.medicineImage}} style={styles.image} />
+          <Image source={{ uri: item.medicineImage }} style={styles.image} />
           <Text style={styles.itemName}>{item.name}</Text>
         </View>
       </TouchableOpacity>
@@ -83,7 +93,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   itemContainer: {
-    borderColor:'red',
+    borderColor: 'red',
     marginRight: 15,
     alignItems: 'center',
   },

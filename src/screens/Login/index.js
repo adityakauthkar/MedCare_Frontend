@@ -1,22 +1,21 @@
 /* eslint-disable prettier/prettier */
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, Alert, Button } from 'react-native';
 import * as yup from 'yup';
 import { Formik } from 'formik';
 import { RegisterUserAPI } from '../../api/UserAPI';
 import { showSnackBar } from '../../utils/snackBar';
+import { ShowToast } from '../../utils/snackBar';
 import { object, string, number, date, InferType } from 'yup';
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import Icons from 'react-native-vector-icons/dist/Ionicons';
-import Login from '../Login';
-import { ShowToast } from '../../utils/snackBar';
+import { LoginUserAPI } from '../../api/UserAPI';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //YUP Schema: 
-const signUpValidation = yup.object().shape({
-  username: yup
-    .string()
-    .required('username is required '),
+const signInValidationSchema = yup.object().shape({
+
   email: yup
     .string()
     .email('Please enter valid email')
@@ -24,26 +23,46 @@ const signUpValidation = yup.object().shape({
   password: yup
     .string()
     .matches(/\w*[a-z]\w*/, 'Password must have small letter')
-    .matches(/\w*[A-Z]\w*/, 'Password must have small letter')
+    .matches(/\w*[A-Z]\w*/, 'Password must have capital letter')
     .matches(/\d/, 'Password must have number')
     .matches(
       /[!@#$%^&*()\-_"=+{}; :,<.>]/,
       'Password must have a special character',
     )
-    .min(8, ({ min }) => `Passowrd must be at least ${min} characters`)
+    .min(4, ({ min }) => `Passowrd must be at least ${min} characters`)
     .required('Password is required'),
 })
 
 
-// REGISTER FUNCTION : 
-const Register = () => {
+// LOGIN Function: 
+const Login = () => {
   const navigation = useNavigation();
+
+  useEffect(() => {
+
+    const checkLoginStatus = async () => {
+      const token = await AsyncStorage.getItem('token');
+      if (token) {
+        navigation.navigate('Home');
+      }
+    };
+    checkLoginStatus();
+
+
+  }, [navigation]);
+
+
+
+
 
   const [showSpineer, setShowSpinner] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
+
+
+
 
   return (
     <View style={styles.mainContainer}>
@@ -57,35 +76,25 @@ const Register = () => {
 
         {/*FORM VALIDATION CONTAINER */}
         <Formik
-          initialValues={{ username: ' ', email: '', password: '' }}
-          validationSchema={signUpValidation}
-          onSubmit={async (values)=>{
-            setShowSpinner(true);
+          validationSchema={signInValidationSchema}
+          initialValues={{ email: '', password: '' }}
+          onSubmit={async (values) => {
+            setShowSpinner(true)
             console.log(values);
-            RegisterUserAPI(values).then(res => {
-              console.log("Response" , res);
+            LoginUserAPI(values).then(res => {
+              console.log("Response", res);
               setShowSpinner(false);
-              ShowToast()
-              Alert.alert(
-                " ",
-                res.msg,
-                )
+              //  ShowToast();
 
-                [
-                  {
-                      text: 'OK ',
-                      onPress: () =>{
-                          navigation.navigate('Login')
-                      }
-                  }
-              ]
-            }).catch(err =>{
-              console.log("Errors" , err.response.data?.msg);
+              navigation.navigate('Home');
+              // console.log("User coming from state" , user);
+            }).catch(err => {
+              console.log("Errors", err);
               setShowSpinner(false);
-              // showSnackBar(err.response.data?.msg , 'ERROR');
+
             })
-          } }
-        
+          }}
+
 
         >
           {({ handleChange, handleBlur, handleSubmit, values, touched, isValid, errors }) => (
@@ -100,19 +109,7 @@ const Register = () => {
 
               {/* ALL INPUTS OF USERS  */}
 
-              <View style={styles.input}>
-                <TextInput placeholder="Enter your username.."
-                  onChangeText={handleChange('username')}
-                  onBlur={handleBlur('username')}
-                  value={values.username}
-                />
-                {(errors.username && touched.username) &&
-                  <Text style={{ fontSize: scale(10), color: 'red', marginTop: scale(5) }}>{errors.username}</Text>
 
-                }
-
-
-              </View>
               <View style={styles.emailInput}>
                 <TextInput placeholder="Enter your Email.."
                   onChangeText={handleChange('email')}
@@ -150,9 +147,9 @@ const Register = () => {
 
 
               <TouchableOpacity style={styles.signUp}
-              onPress={handleSubmit}
+                onPress={handleSubmit}
               >
-                <Text style={styles.signUpText}>Sign Up</Text>
+                <Text style={styles.signUpText}>Log In</Text>
               </TouchableOpacity>
             </View>
           )}
@@ -161,10 +158,10 @@ const Register = () => {
         {/* REGISTER TEXT */}
         <View style={styles.RegisterText}>
           <Text style={{ marginLeft: 18, color: 'black' }}>
-            Already Registered ?{' '}
+            Not Registered ?{' '}
           </Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-            <Text style={{ marginLeft: 70, color: 'blue' }}>Login here. </Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+            <Text style={{ marginLeft: 70, color: 'blue' }}>Register here. </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -240,7 +237,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 20, // Adjusted marginTop to fit better with the previous input
     marginHorizontal: 20,
-    flexDirection:'row',
+    flexDirection: 'row',
   },
   medicineText: {
     marginHorizontal: 20,
@@ -268,4 +265,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Register;
+export default Login;
