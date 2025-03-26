@@ -49,3 +49,11 @@ Screenshots:
 
 <img src="https://github.com/adityakauthkar/MedCare_Frontend/blob/515c92697963e5a283b5a0b72e3828149d2e1758/screenshot4.jpg?raw=true" width="400">
 
+<img src="https://github.com/adityakauthkar/MedCare_Frontend/blob/537bf976f7aeec738683a93d00f8ad46058630bb/screen5.jpg" width="400">
+
+<img src="https://github.com/adityakauthkar/MedCare_Frontend/blob/537bf976f7aeec738683a93d00f8ad46058630bb/screen6.jpg" width="400">
+
+<img src="https://github.com/adityakauthkar/MedCare_Frontend/blob/537bf976f7aeec738683a93d00f8ad46058630bb/screen7.jpg" width="400">
+
+
+
