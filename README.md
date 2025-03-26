@@ -39,4 +39,4 @@ Aditya Kauthkar.
 
 
 Screenshots:
-![image alt] (https://github.com/adityakauthkar/MedCare_Frontend/blob/3137d24f610b63ae74227e4f249de35d3f067482/screenshot1.jpg)
+![image alt] (https://github.com/adityakauthkar/MedCare_Frontend/blob/3137d24f610b63ae74227e4f249de35d3f067482/screenshot1.jpg?raw=true)
