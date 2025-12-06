@@ -1,0 +1,11 @@
+Features
+
+
+searchmedicineAPI 
+topselling products
+shop by category
+register
+login 
+reminder api 
+maps api 
+account info api 

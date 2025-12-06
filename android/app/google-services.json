@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "677456700775",
+    "project_id": "medcare-6ba65",
+    "storage_bucket": "medcare-6ba65.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:677456700775:android:e92bfdea7a0f406815bbc2",
+        "android_client_info": {
+          "package_name": "com.medcare"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBctwAt4nEuVCqnOe4kN_5L8Dec2NcJrJg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
